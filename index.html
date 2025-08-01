@@ -323,6 +323,7 @@
             opacity: 0;
             transform: scale(0) rotate(180deg);
             filter: blur(5px);
+            pointer-events: none;
         }
 
         .rope:hover {
@@ -587,6 +588,37 @@
             75% { transform: translateX(5px); }
         }
     </style>
+    <script>
+    // Make the ropes open the envelope when clicked
+    window.addEventListener('DOMContentLoaded', function() {
+        function openEnvelope() {
+            var envelope = document.getElementById('envelope');
+            var content = document.getElementById('content');
+            var ropes = document.querySelectorAll('.rope');
+            if (!envelope.classList.contains('opened')) {
+                ropes.forEach(function(rope) {
+                    rope.classList.add('cut');
+                });
+                setTimeout(function() {
+                    envelope.classList.add('opened');
+                    setTimeout(function() {
+                        content.classList.add('show');
+                    }, 800);
+                }, 500);
+            }
+        }
+
+        // Add click event to both ropes
+        var ropeH = document.getElementById('rope-h');
+        var ropeV = document.getElementById('rope-v');
+        if (ropeH) ropeH.addEventListener('click', openEnvelope);
+        if (ropeV) ropeV.addEventListener('click', openEnvelope);
+
+        // Optionally, keep wax seal clickable as before
+        var waxSeal = document.getElementById('waxSeal');
+        if (waxSeal) waxSeal.addEventListener('click', openEnvelope);
+    });
+    </script>
 </head>
 <body>
     <!-- Magical floating particles -->
