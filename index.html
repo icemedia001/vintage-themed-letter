@@ -138,11 +138,12 @@
                 inset 0 -3px 6px rgba(0,0,0,0.4),
                 0 0 15px rgba(255, 255, 255, 0.3);
             cursor: pointer;
-            z-index: 10;
+            z-index: 15;
             animation: mysticalPulse 3s infinite;
             position: relative;
             overflow: hidden;
             touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .wax-seal::before {
@@ -287,7 +288,8 @@
             transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             cursor: pointer;
             touch-action: manipulation;
-            z-index: 8;
+            z-index: 12;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .rope::before {
@@ -309,6 +311,9 @@
             top: 50%;
             left: 0;
             transform: translateY(-50%);
+            /* Increase touch target area */
+            padding: 10px 0;
+            margin: -10px 0;
         }
 
         .rope.vertical {
@@ -317,6 +322,9 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
+            /* Increase touch target area */
+            padding: 0 10px;
+            margin: 0 -10px;
         }
 
         .rope.cut {
@@ -735,6 +743,7 @@
         let ropesClicked = 0;
         let isOpened = false;
         let touchIndicatorTimeout;
+        let totalClicks = 0;
 
         // Create touch indicator
         function createTouchIndicator(x, y) {
@@ -790,6 +799,7 @@
 
         // Function to cut rope with enhanced effects
         function cutRope(rope) {
+            console.log('Cutting rope:', rope.id, 'ropesClicked:', ropesClicked);
             if (!isOpened) {
                 rope.style.transform += ' rotateZ(45deg)';
                 rope.style.filter = 'brightness(1.5) saturate(2) drop-shadow(0 0 20px rgba(255, 69, 0, 0.8))';
@@ -846,6 +856,7 @@
             if (isOpened) {
                 isOpened = false;
                 ropesClicked = 0;
+                totalClicks = 0;
                 
                 content.classList.remove('show');
                 envelope.classList.remove('opened');
@@ -875,6 +886,7 @@
 
         // Enhanced rope click handling
         function handleRopeClick(rope, event) {
+            console.log('Rope clicked:', rope.id, event.type);
             event.stopPropagation();
             event.preventDefault();
             
@@ -884,7 +896,14 @@
                 createTouchIndicator(event.clientX, event.clientY);
             }
             
+            totalClicks++;
             cutRope(rope);
+            
+            // Fallback: if user clicks too many times, open letter anyway
+            if (totalClicks >= 4 && !isOpened) {
+                console.log('Fallback: Opening letter after multiple clicks');
+                setTimeout(openLetter, 500);
+            }
         }
 
         // Enhanced digital seal click handling
@@ -908,6 +927,7 @@
 
         // Enhanced wax seal interaction
         function handleWaxSealClick(event) {
+            console.log('Wax seal clicked:', event.type);
             event.stopPropagation();
             event.preventDefault();
             
@@ -920,11 +940,21 @@
             waxSeal.style.transform = 'translate(-50%, -50%) scale(1.3) rotate(10deg)';
             waxSeal.style.filter = 'brightness(1.5) saturate(2) drop-shadow(0 0 30px rgba(220, 20, 60, 1))';
             
+            totalClicks += 2; // Wax seal counts as 2 clicks
+            
             // Start opening process by cutting first rope
             setTimeout(() => {
                 cutRope(ropeH);
                 setTimeout(() => cutRope(ropeV), 400);
             }, 500);
+            
+            // Fallback: if wax seal is clicked, open letter after a delay
+            setTimeout(() => {
+                if (!isOpened) {
+                    console.log('Fallback: Opening letter after wax seal click');
+                    openLetter();
+                }
+            }, 2000);
         }
 
         // Enhanced close button handling
@@ -957,42 +987,45 @@
             }
         }
 
-        // Event listeners for ropes
-        ropeH.addEventListener('click', (e) => handleRopeClick(ropeH, e));
-        ropeH.addEventListener('touchend', (e) => handleRopeClick(ropeH, e));
+        // Enhanced event listeners for better mobile support
+        function addTouchListeners(element, handler) {
+            // Mouse events for desktop
+            element.addEventListener('click', handler);
+            
+            // Touch events for mobile
+            element.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                handler(e);
+            }, { passive: false });
+            
+            element.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                handler(e);
+            }, { passive: false });
+        }
 
-        ropeV.addEventListener('click', (e) => handleRopeClick(ropeV, e));
-        ropeV.addEventListener('touchend', (e) => handleRopeClick(ropeV, e));
+        // Event listeners for ropes
+        addTouchListeners(ropeH, (e) => handleRopeClick(ropeH, e));
+        addTouchListeners(ropeV, (e) => handleRopeClick(ropeV, e));
 
         // Wax seal interaction (red seal in center)
-        waxSeal.addEventListener('click', handleWaxSealClick);
-        waxSeal.addEventListener('touchend', handleWaxSealClick);
+        addTouchListeners(waxSeal, handleWaxSealClick);
 
         // Digital seal interaction (opens link)
-        digitalSeal.addEventListener('click', (e) => handleDigitalSealClick(digitalSeal, e));
-        digitalSeal.addEventListener('touchend', (e) => handleDigitalSealClick(digitalSeal, e));
+        addTouchListeners(digitalSeal, (e) => handleDigitalSealClick(digitalSeal, e));
 
         // Digital seal in content (also opens link)
-        digitalSealContent.addEventListener('click', (e) => handleDigitalSealClick(digitalSealContent, e));
-        digitalSealContent.addEventListener('touchend', (e) => handleDigitalSealClick(digitalSealContent, e));
+        addTouchListeners(digitalSealContent, (e) => handleDigitalSealClick(digitalSealContent, e));
 
         // Close button functionality
-        closeBtn.addEventListener('click', handleCloseClick);
-        closeBtn.addEventListener('touchend', handleCloseClick);
+        addTouchListeners(closeBtn, handleCloseClick);
 
         // Alternative: click envelope to start opening process
-        envelope.addEventListener('click', handleEnvelopeClick);
-        envelope.addEventListener('touchend', handleEnvelopeClick);
+        addTouchListeners(envelope, handleEnvelopeClick);
 
-        // Prevent default touch behaviors that might interfere
-        document.addEventListener('touchstart', function(e) {
-            // Allow scrolling in letter content
-            if (!e.target.closest('.letter-content')) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        // Prevent zoom on double tap
+        // Prevent zoom on double tap but allow touch interactions
         let lastTouchEnd = 0;
         document.addEventListener('touchend', function (event) {
             const now = (new Date()).getTime();
@@ -1005,18 +1038,21 @@
         // Initialize magical particles
         createMagicalParticles();
 
-        // Add visual feedback for touch interactions
+        // Add visual feedback for touch interactions (simplified)
         const touchElements = [ropeH, ropeV, digitalSeal, digitalSealContent, envelope, closeBtn, waxSeal];
         
         touchElements.forEach(element => {
             element.addEventListener('touchstart', function(e) {
-                this.style.opacity = '0.8';
-                this.style.transform = (this.style.transform || '') + ' scale(1.05)';
+                // Only add visual feedback for non-interactive elements
+                if (!this.classList.contains('rope') && !this.classList.contains('wax-seal')) {
+                    this.style.opacity = '0.8';
+                }
             }, { passive: true });
             
             element.addEventListener('touchcancel', function(e) {
-                this.style.opacity = '';
-                this.style.transform = this.style.transform.replace(' scale(1.05)', '');
+                if (!this.classList.contains('rope') && !this.classList.contains('wax-seal')) {
+                    this.style.opacity = '';
+                }
             }, { passive: true });
         });
 
