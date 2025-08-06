@@ -138,7 +138,7 @@
                 inset 0 -3px 6px rgba(0,0,0,0.4),
                 0 0 15px rgba(255, 255, 255, 0.3);
             cursor: pointer;
-            z-index: 15;
+            z-index: 30;
             animation: mysticalPulse 3s infinite;
             position: relative;
             overflow: hidden;
@@ -288,7 +288,7 @@
             transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             cursor: pointer;
             touch-action: manipulation;
-            z-index: 12;
+            z-index: 25;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -312,8 +312,9 @@
             left: 0;
             transform: translateY(-50%);
             /* Increase touch target area */
-            padding: 10px 0;
-            margin: -10px 0;
+            padding: 20px 0;
+            margin: -20px 0;
+            background-color: rgba(139, 69, 19, 0.8) !important;
         }
 
         .rope.vertical {
@@ -323,8 +324,9 @@
             left: 50%;
             transform: translateX(-50%);
             /* Increase touch target area */
-            padding: 0 10px;
-            margin: 0 -10px;
+            padding: 0 20px;
+            margin: 0 -20px;
+            background-color: rgba(139, 69, 19, 0.8) !important;
         }
 
         .rope.cut {
@@ -954,7 +956,7 @@
                     console.log('Fallback: Opening letter after wax seal click');
                     openLetter();
                 }
-            }, 2000);
+            }, 1000);
         }
 
         // Enhanced close button handling
@@ -992,13 +994,7 @@
             // Mouse events for desktop
             element.addEventListener('click', handler);
             
-            // Touch events for mobile
-            element.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                handler(e);
-            }, { passive: false });
-            
+            // Touch events for mobile - only touchend
             element.addEventListener('touchend', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1042,16 +1038,13 @@
         const touchElements = [ropeH, ropeV, digitalSeal, digitalSealContent, envelope, closeBtn, waxSeal];
         
         touchElements.forEach(element => {
-            element.addEventListener('touchstart', function(e) {
+            element.addEventListener('touchend', function(e) {
                 // Only add visual feedback for non-interactive elements
                 if (!this.classList.contains('rope') && !this.classList.contains('wax-seal')) {
                     this.style.opacity = '0.8';
-                }
-            }, { passive: true });
-            
-            element.addEventListener('touchcancel', function(e) {
-                if (!this.classList.contains('rope') && !this.classList.contains('wax-seal')) {
-                    this.style.opacity = '';
+                    setTimeout(() => {
+                        this.style.opacity = '';
+                    }, 200);
                 }
             }, { passive: true });
         });
