@@ -3,1053 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Letter For You</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Cinzel:wght@400;500;600&family=Great+Vibes&family=Alex+Brush&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(160, 82, 45, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(218, 165, 32, 0.2) 0%, transparent 50%),
-                linear-gradient(135deg, #2C1810 0%, #5D4037 25%, #8B4513 50%, #D2691E 75%, #CD853F 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Dancing Script', cursive;
-            overflow: hidden;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23B8860B" stroke-width="2"><path d="M12 2l-1.5 4.5L6 8l4.5 1.5L12 14l1.5-4.5L18 8l-4.5-1.5L12 2z"/><circle cx="12" cy="12" r="1" fill="%23B8860B"/></svg>'), auto;
-            position: relative;
-            touch-action: manipulation;
-        }
-
-        /* Floating magical particles */
-        .magic-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: radial-gradient(circle, #FFD700, #FFA500);
-            border-radius: 50%;
-            animation: float 6s infinite ease-in-out;
-            box-shadow: 0 0 10px #FFD700;
-            pointer-events: none;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            50% { transform: translateY(-100px) rotate(180deg); opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-200px) rotate(360deg); opacity: 0; }
-        }
-
-        .container {
-            position: relative;
-            perspective: 1500px;
-            width: 90vw;
-            max-width: 450px;
-            height: 80vh;
-            max-height: 650px;
-            filter: drop-shadow(0 30px 60px rgba(0,0,0,0.5));
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .letter-envelope {
-            position: relative;
-            width: 100%;
-            height: 70%;
-            background: 
-                linear-gradient(145deg, #F4E4BC 0%, #DEB887 25%, #D2B48C 50%, #C19A6B 75%, #A0522D 100%);
-            border-radius: 20px;
-            box-shadow: 
-                0 30px 60px rgba(0,0,0,0.4),
-                inset 0 2px 0 rgba(255,255,255,0.3),
-                inset 0 -2px 0 rgba(0,0,0,0.2),
-                0 0 50px rgba(218, 165, 32, 0.3);
-            transform-style: preserve-3d;
-            transition: all 1.2s cubic-bezier(0.23, 1, 0.320, 1);
-            cursor: pointer;
-            overflow: hidden;
-            touch-action: manipulation;
-        }
-
-        .letter-envelope::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 30% 70%, rgba(139, 0, 0, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 70% 30%, rgba(160, 82, 45, 0.1) 0%, transparent 50%);
-            border-radius: 20px;
-            pointer-events: none;
-        }
-
-        .letter-envelope.opened {
-            transform: rotateX(-20deg) scale(0.95);
-            opacity: 0;
-            pointer-events: none;
-            animation: letterOpen 2s ease-out forwards;
-        }
-
-        @keyframes letterOpen {
-            0% { 
-                transform: rotateX(0deg) scale(1);
-                opacity: 1;
-            }
-            30% {
-                transform: rotateX(-10deg) scale(0.98);
-                opacity: 0.8;
-            }
-            60% {
-                transform: rotateX(-15deg) scale(0.96);
-                opacity: 0.5;
-            }
-            100% { 
-                transform: rotateX(-20deg) scale(0.95);
-                opacity: 0;
-            }
-        }
-
-        .wax-seal {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            background: 
-                radial-gradient(circle at 30% 30%, #FF6B6B, #DC143C 40%, #8B0000 70%, #4A0000 100%);
-            border-radius: 50%;
-            box-shadow: 
-                0 0 30px rgba(220, 20, 60, 0.8),
-                inset 0 3px 6px rgba(255,255,255,0.4),
-                inset 0 -3px 6px rgba(0,0,0,0.4),
-                0 0 15px rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            z-index: 30;
-            animation: mysticalPulse 3s infinite;
-            position: relative;
-            overflow: hidden;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .wax-seal::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 35px;
-            height: 35px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gold"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>') center/cover;
-            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
-            pointer-events: none;
-        }
-
-        .wax-seal::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 4s infinite;
-            pointer-events: none;
-        }
-
-        @keyframes mysticalPulse {
-            0%, 100% { 
-                transform: translate(-50%, -50%) scale(1); 
-                box-shadow: 
-                    0 0 30px rgba(220, 20, 60, 0.8),
-                    inset 0 3px 6px rgba(255,255,255,0.4),
-                    inset 0 -3px 6px rgba(0,0,0,0.4),
-                    0 0 15px rgba(255, 255, 255, 0.3);
-            }
-            50% { 
-                transform: translate(-50%, -50%) scale(1.15); 
-                box-shadow: 
-                    0 0 50px rgba(220, 20, 60, 1),
-                    inset 0 3px 6px rgba(255,255,255,0.6),
-                    inset 0 -3px 6px rgba(0,0,0,0.6),
-                    0 0 25px rgba(255, 255, 255, 0.5);
-            }
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) translateY(-100%); }
-            50% { transform: translateX(100%) translateY(100%); }
-            100% { transform: translateX(-100%) translateY(-100%); }
-        }
-
-        .red-stamp {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            transform: rotate(-18deg);
-            width: 120px;
-            height: 90px;
-            background: 
-                linear-gradient(145deg, #8B0000 0%, #DC143C 50%, #B22222 100%);
-            border: 4px solid #660000;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #FFD700;
-            font-size: 12px;
-            font-weight: bold;
-            text-align: center;
-            box-shadow: 
-                0 6px 12px rgba(0,0,0,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.2);
-            font-family: 'Cinzel', serif;
-            letter-spacing: 1px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        .digital-seal {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: 40px;
-            height: 40px;
-            background: 
-                radial-gradient(circle at 30% 30%, #FFD700, #FFA500 40%, #FF8C00 70%, #FF6347 100%);
-            border-radius: 50%;
-            box-shadow: 
-                0 0 20px rgba(255, 215, 0, 0.8),
-                inset 0 2px 4px rgba(255,255,255,0.4),
-                inset 0 -2px 4px rgba(0,0,0,0.4);
-            cursor: pointer;
-            z-index: 15;
-            animation: digitalPulse 2s infinite;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            touch-action: manipulation;
-        }
-
-        .digital-seal::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 25px;
-            height: 25px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="darkred"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>') center/cover;
-            filter: drop-shadow(0 0 3px rgba(139, 0, 0, 0.8));
-            pointer-events: none;
-        }
-
-        @keyframes digitalPulse {
-            0%, 100% { 
-                transform: scale(1); 
-                box-shadow: 
-                    0 0 20px rgba(255, 215, 0, 0.8),
-                    inset 0 2px 4px rgba(255,255,255,0.4),
-                    inset 0 -2px 4px rgba(0,0,0,0.4);
-            }
-            50% { 
-                transform: scale(1.1); 
-                box-shadow: 
-                    0 0 30px rgba(255, 215, 0, 1),
-                    inset 0 2px 4px rgba(255,255,255,0.6),
-                    inset 0 -2px 4px rgba(0,0,0,0.6);
-            }
-        }
-
-        .rope {
-            position: absolute;
-            background: 
-                linear-gradient(90deg, #8B4513 0%, #A0522D 25%, #CD853F 50%, #DEB887 75%, #A0522D 100%);
-            border-radius: 15px;
-            box-shadow: 
-                0 4px 8px rgba(0,0,0,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.3),
-                inset 0 -1px 0 rgba(0,0,0,0.2);
-            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            cursor: pointer;
-            touch-action: manipulation;
-            z-index: 25;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .rope::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px);
-            border-radius: 15px;
-            pointer-events: none;
-        }
-
-        .rope.horizontal {
-            width: 100%;
-            height: 12px;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            /* Increase touch target area */
-            padding: 20px 0;
-            margin: -20px 0;
-            background-color: rgba(139, 69, 19, 0.8) !important;
-        }
-
-        .rope.vertical {
-            width: 12px;
-            height: 100%;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            /* Increase touch target area */
-            padding: 0 20px;
-            margin: 0 -20px;
-            background-color: rgba(139, 69, 19, 0.8) !important;
-        }
-
-        .rope.cut {
-            opacity: 0;
-            transform: scale(0) rotate(180deg);
-            filter: blur(5px);
-            pointer-events: none;
-        }
-
-        .rope:hover {
-            filter: brightness(1.2) drop-shadow(0 0 10px rgba(255, 69, 0, 0.6));
-        }
-
-        .letter-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateY(100px) rotateX(-15deg);
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(145deg, #FFF8DC 0%, #F5DEB3 25%, #FFFAF0 50%, #FAF0E6 75%, #FDF5E6 100%);
-            border-radius: 20px;
-            padding: 35px 30px;
-            box-shadow: 
-                0 30px 60px rgba(0,0,0,0.4),
-                inset 0 2px 0 rgba(255,255,255,0.5),
-                inset 0 0 100px rgba(218, 165, 32, 0.1);
-            opacity: 0;
-            transition: all 1.5s cubic-bezier(0.23, 1, 0.320, 1);
-            overflow-y: auto;
-            font-family: 'Great Vibes', cursive;
-            font-size: 20px;
-            line-height: 1.8;
-            color: #8B0000;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-            touch-action: pan-y;
-        }
-
-        .letter-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 25% 75%, rgba(139, 0, 0, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 75% 25%, rgba(160, 82, 45, 0.05) 0%, transparent 50%),
-                linear-gradient(45deg, transparent 49%, rgba(139, 0, 0, 0.02) 50%, transparent 51%),
-                repeating-linear-gradient(90deg, transparent, transparent 25px, rgba(139, 0, 0, 0.02) 25px, rgba(139, 0, 0, 0.02) 26px);
-            pointer-events: none;
-            border-radius: 20px;
-        }
-
-        .letter-content.show {
-            opacity: 1;
-            transform: translate(-50%, -50%) translateY(0) rotateX(0deg);
-        }
-
-        .close-button {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 35px;
-            height: 35px;
-            background: 
-                linear-gradient(145deg, #8B0000 0%, #DC143C 50%, #B22222 100%);
-            border: 2px solid #660000;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #FFD700;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 
-                0 4px 8px rgba(0,0,0,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.2);
-            z-index: 20;
-            transition: all 0.3s ease;
-            touch-action: manipulation;
-        }
-
-        .close-button:hover {
-            transform: scale(1.1);
-            box-shadow: 
-                0 6px 12px rgba(0,0,0,0.6),
-                inset 0 1px 0 rgba(255,255,255,0.3);
-        }
-
-        .close-button::before {
-            content: '×';
-            pointer-events: none;
-        }
-
-        .letter-text {
-            position: relative;
-            z-index: 1;
-            font-weight: 500;
-        }
-
-        .letter-text strong {
-            font-family: 'Alex Brush', cursive;
-            font-size: 24px;
-            color: #660000;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .signature {
-            margin-top: 40px;
-            font-weight: 600;
-            font-size: 24px;
-            text-align: right;
-            font-family: 'Alex Brush', cursive;
-            color: #660000;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .blood-note {
-            margin-top: 25px;
-            font-size: 16px;
-            font-style: italic;
-            text-align: center;
-            color: #8B0000;
-            opacity: 0.9;
-            font-family: 'Dancing Script', cursive;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            animation: bloodGlow 4s infinite alternate;
-        }
-
-        @keyframes bloodGlow {
-            0% { text-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 0 5px rgba(139,0,0,0.3); }
-            100% { text-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 0 15px rgba(139,0,0,0.6); }
-        }
-
-        @keyframes letterFadeIn {
-            from { 
-                opacity: 0; 
-                transform: translateY(30px) rotateX(15deg); 
-                filter: blur(3px);
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0) rotateX(0deg); 
-                filter: blur(0px);
-            }
-        }
-
-        .letter-content.show .letter-text {
-            animation: letterFadeIn 2s ease-out;
-        }
-
-        /* Enhanced mobile optimizations */
-        @media (max-width: 768px) {
-            .container {
-                width: 95vw;
-                height: 90vh;
-            }
-            
-            .letter-content {
-                padding: 25px 20px;
-                font-size: 18px;
-                line-height: 1.7;
-            }
-            
-            .wax-seal {
-                width: 70px;
-                height: 70px;
-            }
-            
-            .digital-seal {
-                width: 35px;
-                height: 35px;
-                bottom: 15px;
-                left: 15px;
-            }
-            
-            .red-stamp {
-                width: 90px;
-                height: 60px;
-                font-size: 10px;
-                top: 15px;
-                right: 15px;
-            }
-            
-            .rope.horizontal {
-                height: 14px;
-            }
-            
-            .rope.vertical {
-                width: 14px;
-            }
-        }
-
-        /* Enhanced scrollbar styling */
-        .letter-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .letter-content::-webkit-scrollbar-track {
-            background: linear-gradient(180deg, rgba(139, 0, 0, 0.1), rgba(160, 82, 45, 0.1));
-            border-radius: 4px;
-        }
-
-        .letter-content::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, rgba(139, 0, 0, 0.4), rgba(139, 0, 0, 0.6));
-            border-radius: 4px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
-        }
-
-        .letter-content::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, rgba(139, 0, 0, 0.6), rgba(139, 0, 0, 0.8));
-        }
-
-        /* Breathing animation for the whole container */
-        .container {
-            animation: breathe 8s infinite ease-in-out;
-        }
-
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-
-        /* Add dramatic entrance animation */
-        .letter-envelope {
-            animation: dramaticEntrance 2s ease-out;
-        }
-
-        @keyframes dramaticEntrance {
-            0% {
-                transform: scale(0.3) rotateY(-90deg) rotateX(45deg);
-                opacity: 0;
-                filter: blur(10px);
-            }
-            50% {
-                transform: scale(1.1) rotateY(15deg) rotateX(-5deg);
-                opacity: 0.8;
-                filter: blur(2px);
-            }
-            100% {
-                transform: scale(1) rotateY(0deg) rotateX(0deg);
-                opacity: 1;
-                filter: blur(0px);
-            }
-        }
-
-        .touch-indicator {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #FFD700;
-            border-radius: 50%;
-            pointer-events: none;
-            animation: touchRipple 1s infinite;
-            z-index: 100;
-        }
-
-        @keyframes touchRipple {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-    </style>
-    <script>
-    // Make the ropes open the envelope when clicked
-    window.addEventListener('DOMContentLoaded', function() {
-        function openEnvelope() {
-            var envelope = document.getElementById('envelope');
-            var content = document.getElementById('content');
-            var ropes = document.querySelectorAll('.rope');
-            if (!envelope.classList.contains('opened')) {
-                ropes.forEach(function(rope) {
-                    rope.classList.add('cut');
-                });
-                setTimeout(function() {
-                    envelope.classList.add('opened');
-                    setTimeout(function() {
-                        content.classList.add('show');
-                    }, 800);
-                }, 500);
-            }
-        }
-
-        // Add click event to both ropes
-        var ropeH = document.getElementById('rope-h');
-        var ropeV = document.getElementById('rope-v');
-        if (ropeH) ropeH.addEventListener('click', openEnvelope);
-        if (ropeV) ropeV.addEventListener('click', openEnvelope);
-
-        // Optionally, keep wax seal clickable as before
-        var waxSeal = document.getElementById('waxSeal');
-        if (waxSeal) waxSeal.addEventListener('click', openEnvelope);
-    });
-    </script>
+    <title>Vintage Letter</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&family=Crimson+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&family=Satisfy&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Magical floating particles -->
-    <div class="magic-particle" style="left: 10%; animation-delay: 0s;"></div>
-    <div class="magic-particle" style="left: 20%; animation-delay: 1s;"></div>
-    <div class="magic-particle" style="left: 30%; animation-delay: 2s;"></div>
-    <div class="magic-particle" style="left: 40%; animation-delay: 3s;"></div>
-    <div class="magic-particle" style="left: 50%; animation-delay: 4s;"></div>
-    <div class="magic-particle" style="left: 60%; animation-delay: 0.5s;"></div>
-    <div class="magic-particle" style="left: 70%; animation-delay: 1.5s;"></div>
-    <div class="magic-particle" style="left: 80%; animation-delay: 2.5s;"></div>
-    <div class="magic-particle" style="left: 90%; animation-delay: 3.5s;"></div>
-
     <div class="container">
-        <div class="letter-envelope" id="envelope">
-            <div class="red-stamp">WITH ETERNAL LOVE</div>
-            <div class="wax-seal" id="waxSeal"></div>
-            <div class="digital-seal" id="digitalSeal"></div>
-            
-            <div class="rope horizontal" id="rope-h"></div>
-            <div class="rope vertical" id="rope-v"></div>
+        <!-- Closed Letter State -->
+        <div class="letter-closed" id="letterClosed">
+            <div class="letter-paper">
+                <div class="corner-decoration"></div>
+                <div class="corner-decoration bottom-left"></div>
+                <div class="corner-decoration bottom-right"></div>
+                <div class="letter-content">
+                    <div class="wax-seal" id="waxSeal" data-initial="A">
+                        <div class="seal-ring"></div>
+                        <div class="seal-center">
+                            <div class="seal-initial">A</div>
+                        </div>
+                        <!-- Scent animation container -->
+                        <div class="scent-container"></div>
+                    </div>
+                    <div class="letter-text">
+                        <div class="recipient-box">
+                            <p class="recipient">To my beloved with eternal love</p>
+                        </div>
+                        <p class="date">With Love</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="letter-content" id="content">
-            <div class="close-button" id="closeBtn"></div>
-            <div class="digital-seal" id="digitalSealContent"></div>
-            <div class="letter-text">
-                <p><strong>My Beloved,</strong></p>
-                <br>
-                <p>You're the storm I willingly walk into<br>
-                not fearing the lightning,<br>
-                craving the thunder<br>
-                because it's you.</p>
-                <br>
-                <p>From the very start, you've felt like something I never knew I was waiting for.<br>
-                The weight of joy I never want to set down.<br>
-                A forever I don't just believe in…<br>
-                I want to hold with both hands and never let go.</p>
-                <br>
-                <p>I've imagined a thousand kinds of love,<br>
-                but none of them ever had a face<br>
-                until yours turned fiction into truth.</p>
-                <br>
-                <p>When I first saw you, your height, that yellow jumpsuit with the dark dancing patterns<br>
-                I didn't know what to feel.<br>
-                But then you looked at me… and I fell.<br>
-                Hard.<br>
-                Deep.<br>
-                Fast.<br>
-                Like gravity had chosen only me.</p>
-                <br>
-                <p>And now I know  this isn't just some Girlfriend's Day letter.<br>
-                This is a confession. A vow. A piece of my soul.<br>
-                Because this isn't just love.<br>
-                This is us.</p>
-                <br>
-                <p>And us means something rare. Something real.<br>
-                You're not just someone I love.<br>
-                You're someone I choose again and again.</p>
-                <br>
-                <p>I want to love you loudly, softly, stubbornly.<br>
-                I want to protect you in ways I've never wanted to protect anyone before.</p>
-                <br>
-                <p>Even when you're far, you're the reason I shine.<br>
-                Like the moon reflects the sun's light, your love touches me <br>
-                Softly.<br>
-                From a distance.<br>
-                But enough to turn my darkness into silver.</p>
-                <br>
-                <p>You are my calm in chaos.<br>
-                My echo of warmth in the chill of solitude.<br>
-                My home, in a world that never stops spinning.</p>
-                <br>
-                <p>And I want you to remember this not just today, but every day, especially the hard ones:<br>
-                I will never give up on us.<br>
-                Not in silence, not in space, not in doubt.</p>
-                <br>
-                <p>I'm holding on. Not because I have to... but because I want to.<br>
-                Because you are worth every part of the fight.</p>
-                <br>
-                <p>If life ever gets too heavy, I'll carry it with you.<br>
-                If you ever feel alone, remember: I am here.<br>
-                Always.</p>
-                <br>
-                <p>You'll never be alone again.<br>
-                You have me for real, for good, for forever.</p>
-                <br>
-                <p>So hold on.<br>
-                Like I'm holding on.<br>
-                For you. For us.<br>
-                For everything we haven't even lived yet.</p>
-                <br>
-                <p>You're my favorite miracle.<br>
-                And in every lifetime, in every version of me <br>
-                I'll still find my way back to you.</p>
-                <br>
-                <div class="signature">Always yours,</div>
-                <br>
-                <div class="blood-note">This was written with my blood.</div>
+        <!-- Opened Letter State -->
+        <div class="letter-opened" id="letterOpened">
+            <div class="letter-paper-opened">
+                <!-- Handwriting Control -->
+                <div class="letter-controls">
+                    <button class="handwriting-toggle" id="handwritingToggle" title="Switch to handwriting">
+                        <span class="handwriting-icon">✒️</span>
+                        <span class="handwriting-text">Handwriting</span>
+                    </button>
+                    <!-- Customize Initial Button -->
+                    <button class="customize-initial" id="customizeInitial" title="Customize the seal initial">
+                        <span class="customize-icon">🔤</span>
+                        <span class="customize-text">Customize</span>
+                    </button>
+                </div>
+
+                <div class="letter-header">
+                    <div class="ornamental-border"></div>
+                    <div class="letter-date">From the Depths of My Soul</div>
+                    <div class="letter-subtitle">Poems from a Heart Unafraid to Break</div>
+                    <div class="letter-location">Written in the Language of Love</div>
+                    <div class="ornamental-border"></div>
+                </div>
+                
+                <div class="letter-body">
+                    <p class="greeting"><strong>My Beloved,</strong></p>
+                    
+                    <p>You're the storm I willingly walk into<br>
+                    not fearing the lightning,<br>
+                    craving the thunder<br>
+                    because it's you.</p>
+                    
+                    <p>From the very start, you've felt like something I never knew I was waiting for.<br>
+                    The weight of joy I never want to set down.<br>
+                    A forever I don't just believe in…<br>
+                    I want to hold with both hands and never let go.</p>
+                    
+                    <p>I've imagined a thousand kinds of love,<br>
+                    but none of them ever had a face<br>
+                    until yours turned fiction into truth.</p>
+                    
+                    <p>When I first saw you, your height, that yellow jumpsuit with the dark dancing patterns<br>
+                    I didn't know what to feel.<br>
+                    But then you looked at me… and I fell.<br>
+                    Hard.<br>
+                    Deep.<br>
+                    Fast.<br>
+                    Like gravity had chosen only me.</p>
+                    
+                    <p>And now I know this isn't just some Girlfriend's Day letter.<br>
+                    This is a confession. A vow. A piece of my soul.<br>
+                    Because this isn't just love.<br>
+                    This is us.</p>
+                    
+                    <p>And us means something rare. Something real.<br>
+                    You're not just someone I love.<br>
+                    You're someone I choose again and again.</p>
+                    
+                    <p>I want to love you loudly, softly, stubbornly.<br>
+                    I want to protect you in ways I've never wanted to protect anyone before.</p>
+                    
+                    <p>Even when you're far, you're the reason I shine.<br>
+                    Like the moon reflects the sun's light, your love touches me <br>
+                    Softly.<br>
+                    From a distance.<br>
+                    But enough to turn my darkness into silver.</p>
+                    
+                    <p>You are my calm in chaos.<br>
+                    My echo of warmth in the chill of solitude.<br>
+                    My home, in a world that never stops spinning.</p>
+                    
+                    <p>And I want you to remember this not just today, but every day, especially the hard ones:<br>
+                    I will never give up on us.<br>
+                    Not in silence, not in space, not in doubt.</p>
+                    
+                    <p>I'm holding on. Not because I have to... but because I want to.<br>
+                    Because you are worth every part of the fight.</p>
+                    
+                    <p>If life ever gets too heavy, I'll carry it with you.<br>
+                    If you ever feel alone, remember: I am here.<br>
+                    Always.</p>
+                    
+                    <p>You'll never be alone again.<br>
+                    You have me for real, for good, for forever.</p>
+                    
+                    <p>So hold on.<br>
+                    Like I'm holding on.<br>
+                    For you. For us.<br>
+                    For everything we haven't even lived yet.</p>
+                    
+                    <p>You're my favorite miracle.<br>
+                    And in every lifetime, in every version of me <br>
+                    I'll still find my way back to you.</p>
+                    
+                    <p class="closing">Always yours,</p>
+                    
+                    <p class="signature">With all my love</p>
+                </div>
+                
+                <div class="letter-footer">
+                    <div class="wax-seal-closing">
+                        <div class="seal-ring-closing"></div>
+                        <div class="seal-center-closing">
+                            <div class="seal-text-closing">Forever Yours</div>
+                        </div>
+                    </div>
+                    <p class="postscript">PS: This was technically written in my blood.</p>
+                </div>
             </div>
+            
+            <button class="close-letter" id="closeLetter">Close Letter</button>
         </div>
     </div>
 
-    <script>
-        const envelope = document.getElementById('envelope');
-        const content = document.getElementById('content');
-        const waxSeal = document.getElementById('waxSeal');
-        const digitalSeal = document.getElementById('digitalSeal');
-        const digitalSealContent = document.getElementById('digitalSealContent');
-        const closeBtn = document.getElementById('closeBtn');
-        const ropeH = document.getElementById('rope-h');
-        const ropeV = document.getElementById('rope-v');
+    <!-- Customize Initial Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <h3>Customize Your Seal</h3>
+            <p>Choose the initial for your wax seal:</p>
+            <div class="initial-options">
+                <button class="initial-option" data-initial="A">A</button>
+                <button class="initial-option" data-initial="B">B</button>
+                <button class="initial-option" data-initial="C">C</button>
+                <button class="initial-option" data-initial="D">D</button>
+                <button class="initial-option" data-initial="E">E</button>
+                <button class="initial-option" data-initial="F">F</button>
+                <button class="initial-option" data-initial="G">G</button>
+                <button class="initial-option" data-initial="H">H</button>
+                <button class="initial-option" data-initial="I">I</button>
+                <button class="initial-option" data-initial="J">J</button>
+                <button class="initial-option" data-initial="K">K</button>
+                <button class="initial-option" data-initial="L">L</button>
+                <button class="initial-option" data-initial="M">M</button>
+                <button class="initial-option" data-initial="N">N</button>
+                <button class="initial-option" data-initial="O">O</button>
+                <button class="initial-option" data-initial="P">P</button>
+                <button class="initial-option" data-initial="Q">Q</button>
+                <button class="initial-option" data-initial="R">R</button>
+                <button class="initial-option" data-initial="S">S</button>
+                <button class="initial-option" data-initial="T">T</button>
+                <button class="initial-option" data-initial="U">U</button>
+                <button class="initial-option" data-initial="V">V</button>
+                <button class="initial-option" data-initial="W">W</button>
+                <button class="initial-option" data-initial="X">X</button>
+                <button class="initial-option" data-initial="Y">Y</button>
+                <button class="initial-option" data-initial="Z">Z</button>
+                <button class="initial-option heart" data-initial="♥">♥</button>
+            </div>
+            <button class="modal-close" id="modalClose">Close</button>
+        </div>
+    </div>
 
-        let ropesClicked = 0;
-        let isOpened = false;
-        let touchIndicatorTimeout;
-        let totalClicks = 0;
-
-        // Create touch indicator
-        function createTouchIndicator(x, y) {
-            const indicator = document.createElement('div');
-            indicator.className = 'touch-indicator';
-            indicator.style.left = (x - 10) + 'px';
-            indicator.style.top = (y - 10) + 'px';
-            document.body.appendChild(indicator);
-            
-            setTimeout(() => {
-                if (indicator.parentNode) {
-                    indicator.parentNode.removeChild(indicator);
-                }
-            }, 1000);
-        }
-
-        // Letter opening sound effect
-        function playOpenSound() {
-            try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
-                oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.3);
-                oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.6);
-                
-                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.8);
-            } catch (e) {
-                console.log('Audio not supported');
-            }
-        }
-
-        // Create more magical particles dynamically
-        function createMagicalParticles() {
-            for (let i = 0; i < 15; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('magic-particle');
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 6 + 's';
-                particle.style.animationDuration = (4 + Math.random() * 4) + 's';
-                document.body.appendChild(particle);
-            }
-        }
-
-        // Function to cut rope with enhanced effects
-        function cutRope(rope) {
-            console.log('Cutting rope:', rope.id, 'ropesClicked:', ropesClicked);
-            if (!isOpened) {
-                rope.style.transform += ' rotateZ(45deg)';
-                rope.style.filter = 'brightness(1.5) saturate(2) drop-shadow(0 0 20px rgba(255, 69, 0, 0.8))';
-                
-                setTimeout(() => {
-                    rope.classList.add('cut');
-                }, 200);
-                
-                ropesClicked++;
-                
-                // Add screen shake effect
-                document.body.style.animation = 'shake 0.3s ease-in-out';
-                setTimeout(() => {
-                    document.body.style.animation = '';
-                }, 300);
-                
-                if (ropesClicked >= 2) {
-                    setTimeout(openLetter, 800);
-                }
-            }
-        }
-
-        // Function to open letter with dramatic effects
-        function openLetter() {
-            if (!isOpened) {
-                isOpened = true;
-                
-                // Play opening sound
-                playOpenSound();
-                
-                // Enhanced opening animation
-                envelope.style.filter = 'blur(3px) brightness(1.5)';
-                envelope.classList.add('opened');
-                
-                setTimeout(() => {
-                    content.classList.add('show');
-                    // Add typewriter effect to text
-                    const textElements = content.querySelectorAll('p');
-                    textElements.forEach((el, index) => {
-                        el.style.opacity = '0';
-                        el.style.transform = 'translateY(20px)';
-                        setTimeout(() => {
-                            el.style.transition = 'all 0.8s ease-out';
-                            el.style.opacity = '1';
-                            el.style.transform = 'translateY(0)';
-                        }, index * 150);
-                    });
-                }, 600);
-            }
-        }
-
-        // Function to close letter
-        function closeLetter() {
-            if (isOpened) {
-                isOpened = false;
-                ropesClicked = 0;
-                totalClicks = 0;
-                
-                content.classList.remove('show');
-                envelope.classList.remove('opened');
-                
-                // Reset ropes
-                ropeH.classList.remove('cut');
-                ropeV.classList.remove('cut');
-                ropeH.style.transform = '';
-                ropeV.style.transform = '';
-                ropeH.style.filter = '';
-                ropeV.style.filter = '';
-                
-                // Reset envelope
-                envelope.style.filter = '';
-                
-                setTimeout(() => {
-                    // Reset text elements
-                    const textElements = content.querySelectorAll('p');
-                    textElements.forEach((el) => {
-                        el.style.opacity = '';
-                        el.style.transform = '';
-                        el.style.transition = '';
-                    });
-                }, 500);
-            }
-        }
-
-        // Enhanced rope click handling
-        function handleRopeClick(rope, event) {
-            console.log('Rope clicked:', rope.id, event.type);
-            event.stopPropagation();
-            event.preventDefault();
-            
-            if (event.touches && event.touches.length > 0) {
-                createTouchIndicator(event.touches[0].clientX, event.touches[0].clientY);
-            } else if (event.clientX && event.clientY) {
-                createTouchIndicator(event.clientX, event.clientY);
-            }
-            
-            totalClicks++;
-            cutRope(rope);
-            
-            // Fallback: if user clicks too many times, open letter anyway
-            if (totalClicks >= 4 && !isOpened) {
-                console.log('Fallback: Opening letter after multiple clicks');
-                setTimeout(openLetter, 500);
-            }
-        }
-
-        // Enhanced digital seal click handling
-        function handleDigitalSealClick(seal, event) {
-            event.stopPropagation();
-            event.preventDefault();
-            
-            if (event.touches && event.touches.length > 0) {
-                createTouchIndicator(event.touches[0].clientX, event.touches[0].clientY);
-            } else if (event.clientX && event.clientY) {
-                createTouchIndicator(event.clientX, event.clientY);
-            }
-            
-            seal.style.transform = 'scale(1.3) rotate(10deg)';
-            seal.style.filter = 'brightness(1.5) saturate(2) drop-shadow(0 0 20px rgba(255, 215, 0, 1))';
-            
-            setTimeout(() => {
-                window.open('https://icemedia001.github.io/scavenger-love/', '_blank');
-            }, 300);
-        }
-
-        // Enhanced wax seal interaction
-        function handleWaxSealClick(event) {
-            console.log('Wax seal clicked:', event.type);
-            event.stopPropagation();
-            event.preventDefault();
-            
-            if (event.touches && event.touches.length > 0) {
-                createTouchIndicator(event.touches[0].clientX, event.touches[0].clientY);
-            } else if (event.clientX && event.clientY) {
-                createTouchIndicator(event.clientX, event.clientY);
-            }
-            
-            waxSeal.style.transform = 'translate(-50%, -50%) scale(1.3) rotate(10deg)';
-            waxSeal.style.filter = 'brightness(1.5) saturate(2) drop-shadow(0 0 30px rgba(220, 20, 60, 1))';
-            
-            totalClicks += 2; // Wax seal counts as 2 clicks
-            
-            // Start opening process by cutting first rope
-            setTimeout(() => {
-                cutRope(ropeH);
-                setTimeout(() => cutRope(ropeV), 400);
-            }, 500);
-            
-            // Fallback: if wax seal is clicked, open letter after a delay
-            setTimeout(() => {
-                if (!isOpened) {
-                    console.log('Fallback: Opening letter after wax seal click');
-                    openLetter();
-                }
-            }, 1000);
-        }
-
-        // Enhanced close button handling
-        function handleCloseClick(event) {
-            event.stopPropagation();
-            event.preventDefault();
-            
-            if (event.touches && event.touches.length > 0) {
-                createTouchIndicator(event.touches[0].clientX, event.touches[0].clientY);
-            } else if (event.clientX && event.clientY) {
-                createTouchIndicator(event.clientX, event.clientY);
-            }
-            
-            closeLetter();
-        }
-
-        // Enhanced envelope click handling
-        function handleEnvelopeClick(event) {
-            if (ropesClicked === 0 && !isOpened) {
-                event.preventDefault();
-                
-                if (event.touches && event.touches.length > 0) {
-                    createTouchIndicator(event.touches[0].clientX, event.touches[0].clientY);
-                } else if (event.clientX && event.clientY) {
-                    createTouchIndicator(event.clientX, event.clientY);
-                }
-                
-                cutRope(ropeH);
-                setTimeout(() => cutRope(ropeV), 400);
-            }
-        }
-
-        // Enhanced event listeners for better mobile support
-        function addTouchListeners(element, handler) {
-            // Mouse events for desktop
-            element.addEventListener('click', handler);
-            
-            // Touch events for mobile - only touchend
-            element.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                handler(e);
-            }, { passive: false });
-        }
-
-        // Event listeners for ropes
-        addTouchListeners(ropeH, (e) => handleRopeClick(ropeH, e));
-        addTouchListeners(ropeV, (e) => handleRopeClick(ropeV, e));
-
-        // Wax seal interaction (red seal in center)
-        addTouchListeners(waxSeal, handleWaxSealClick);
-
-        // Digital seal interaction (opens link)
-        addTouchListeners(digitalSeal, (e) => handleDigitalSealClick(digitalSeal, e));
-
-        // Digital seal in content (also opens link)
-        addTouchListeners(digitalSealContent, (e) => handleDigitalSealClick(digitalSealContent, e));
-
-        // Close button functionality
-        addTouchListeners(closeBtn, handleCloseClick);
-
-        // Alternative: click envelope to start opening process
-        addTouchListeners(envelope, handleEnvelopeClick);
-
-        // Prevent zoom on double tap but allow touch interactions
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function (event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-
-        // Initialize magical particles
-        createMagicalParticles();
-
-        // Add visual feedback for touch interactions (simplified)
-        const touchElements = [ropeH, ropeV, digitalSeal, digitalSealContent, envelope, closeBtn, waxSeal];
-        
-        touchElements.forEach(element => {
-            element.addEventListener('touchend', function(e) {
-                // Only add visual feedback for non-interactive elements
-                if (!this.classList.contains('rope') && !this.classList.contains('wax-seal')) {
-                    this.style.opacity = '0.8';
-                    setTimeout(() => {
-                        this.style.opacity = '';
-                    }, 200);
-                }
-            }, { passive: true });
-        });
-
-        console.log('Love letter initialized successfully!');
-    </script>
+    <script src="script.js"></script>
 </body>
-</html>
+</html> 
